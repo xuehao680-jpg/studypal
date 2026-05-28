@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+/* Use .dark class instead of prefers-color-scheme for manual theme toggle */
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-hero-bg-start: var(--hero-bg-start);
+  --color-hero-bg-end: var(--hero-bg-end);
+}
+
+:root {
+  --hero-bg-start: #eef2ff;
+  --hero-bg-end: #f0e8ff;
+  --particle-color: rgba(99, 102, 241, 0.25);
+  --text-primary: #1e1b4b;
+  --text-secondary: #6366f1;
+  --cta-bg: #4f46e5;
+  --cta-text: #ffffff;
+  --cta-hover: #4338ca;
+  --nav-bg: rgba(255, 255, 255, 0.7);
+  --nav-text: #1e1b4b;
+}
+
+.dark {
+  --hero-bg-start: #0a0a2e;
+  --hero-bg-end: #1a0533;
+  --particle-color: rgba(129, 140, 248, 0.35);
+  --text-primary: #e0e7ff;
+  --text-secondary: #a5b4fc;
+  --cta-bg: #6366f1;
+  --cta-text: #ffffff;
+  --cta-hover: #818cf8;
+  --nav-bg: rgba(10, 10, 46, 0.7);
+  --nav-text: #e0e7ff;
+}
