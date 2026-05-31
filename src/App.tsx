@@ -1,7 +1,12 @@
-import { Navbar } from './components/Navbar'
-import { HeroSection } from './components/HeroSection'
-import { ProjectSection } from './components/ProjectSection'
-import { AboutSection } from './components/AboutSection'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrandSite } from './pages/BrandSite'
+import { LoginPage } from './pages/LoginPage'
+import { RegisterPage } from './pages/RegisterPage'
+import { AnalyticsPage } from './pages/AnalyticsPage'
+import { LearningDashboard } from './components/LearningDashboard'
+import { ProtectedRoute } from './components/ProtectedRoute'
+import { AuthProvider } from './contexts/AuthContext'
+import { ChatPage } from './pages/ChatPage'
 import { useTheme } from './hooks/useTheme'
 
 const heroData = {
@@ -11,22 +16,61 @@ const heroData = {
   ctaText: '查看我的项目',
 }
 
-function App() {
+function AppContent() {
   const { theme, toggleTheme } = useTheme()
 
   return (
-    <>
-      <Navbar name={heroData.name} theme={theme} onToggleTheme={toggleTheme} />
-      <HeroSection
-        name={heroData.name}
-        title={heroData.title}
-        tagline={heroData.tagline}
-        ctaText={heroData.ctaText}
-        theme={theme}
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <BrandSite
+            name={heroData.name}
+            title={heroData.title}
+            tagline={heroData.tagline}
+            ctaText={heroData.ctaText}
+            theme={theme}
+            onToggleTheme={toggleTheme}
+          />
+        }
       />
-      <ProjectSection />
-      <AboutSection />
-    </>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <LearningDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/analytics"
+        element={
+          <ProtectedRoute>
+            <AnalyticsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/chat"
+        element={
+          <ProtectedRoute>
+            <ChatPage />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter basename="/studypal">
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 

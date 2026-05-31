@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface NavbarProps {
   name: string
@@ -7,19 +8,29 @@ interface NavbarProps {
 }
 
 const links = [
-  { label: '首页', target: 'home' },
-  { label: '关于', target: 'about' },
-  { label: '项目', target: 'projects' },
-  { label: '联系我', target: 'contact' },
+  { label: '首页', target: 'home', type: 'scroll' as const },
+  { label: '关于', target: 'about', type: 'scroll' as const },
+  { label: '项目', target: 'projects', type: 'scroll' as const },
+  { label: '学习模式', target: '/dashboard', type: 'route' as const },
+  { label: '联系我', target: 'contact', type: 'scroll' as const },
 ]
 
 export function Navbar({ name, theme, onToggleTheme }: NavbarProps) {
-  const handleClick = useCallback((target: string) => {
-    const el = document.getElementById(target)
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' })
-    }
-  }, [])
+  const navigate = useNavigate()
+
+  const handleClick = useCallback(
+    (link: (typeof links)[number]) => {
+      if (link.type === 'route') {
+        navigate(link.target)
+      } else {
+        const el = document.getElementById(link.target)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
+    },
+    [navigate],
+  )
 
   return (
     <nav
@@ -32,10 +43,10 @@ export function Navbar({ name, theme, onToggleTheme }: NavbarProps) {
         <div className="flex items-center gap-6">
           <ul className="flex items-center gap-6">
             {links.map((link) => (
-              <li key={link.target}>
+              <li key={link.label}>
                 <button
                   className="text-sm font-medium transition-opacity hover:opacity-70"
-                  onClick={() => handleClick(link.target)}
+                  onClick={() => handleClick(link)}
                 >
                   {link.label}
                 </button>
@@ -43,7 +54,6 @@ export function Navbar({ name, theme, onToggleTheme }: NavbarProps) {
             ))}
           </ul>
 
-          {/* Theme toggle */}
           <button
             className="rounded-full p-1.5 transition-opacity hover:opacity-70"
             onClick={onToggleTheme}
